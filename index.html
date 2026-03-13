@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control v1.1 | Orchestrator Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    
+    <div id="login-screen" class="screen">
+        <div class="glass-card login-card animate-fade-in">
+            <div class="auth-header">
+                <div class="pixel-logo">👾</div>
+                <h1>MISSION CONTROL</h1>
+                <p class="version-tag">SYSTEM v1.1 | ORCHESTRATOR</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <label>OPERADOR</label>
+                    <input type="email" id="username" placeholder="Identidad Autorizada" required>
+                </div>
+                <div class="input-group">
+                    <label>ACCESS_KEY</label>
+                    <input type="password" id="password" placeholder="••••••••••••" required>
+                </div>
+                <button type="submit" id="login-submit-btn" class="glitch-btn">VERIFICAR CREDENCIALES</button>
+            </form>
+            <div class="auth-footer">
+                <button onclick="changeNucleusURL()" class="link-btn">⚙️ Configurar IP del Núcleo</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="2fa-screen" class="screen hidden">
+        <div class="glass-card login-card animate-fade-in">
+            <h2>SEGURIDAD_NIVEL_2</h2>
+            <div id="qr-container" class="hidden">
+                <p class="qr-info">Escanea con tu App Autenticador:</p>
+                <div class="qr-wrapper">
+                    <img id="qr-code" src="" alt="QR Setup">
+                </div>
+            </div>
+            <p class="otp-instruction">Introduce el código generado:</p>
+            <input type="text" id="2fa-token" placeholder="000 000" maxlength="6" class="mono-input">
+            <button id="verify-2fa-btn" class="glitch-btn">AUTORIZAR ACCESO</button>
+        </div>
+    </div>
+
+    <div id="main-screen" class="screen hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">O<span>PEN</span> G<span>RAVITY</span></div>
+            </div>
+            <nav>
+                <button class="nav-item active" data-view="dashboard">📊 DASHBOARD</button>
+                <button class="nav-item" data-view="agents">🦾 AGENTES</button>
+                <button class="nav-item" data-view="chat">💬 COMMS</button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-status">
+                    <div class="status-dot"></div>
+                    <span id="user-display">Operador</span>
+                </div>
+                <button id="logout-btn" class="logout-link">DESCONECTAR</button>
+            </div>
+        </aside>
+
+        <section class="content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h2 id="view-title">OPERATIONS_CENTER</h2>
+                </div>
+                <div class="header-right">
+                    <div class="model-selector-wrapper">
+                        <label style="font-size:0.65rem; color:var(--text-dim); margin-bottom:2px; display:block;">CEREBRO ACTIVO</label>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <select id="model-selector" onchange="switchModel()" class="model-select">
+                                <option value="">Cargando modelos...</option>
+                            </select>
+                        </div>
+                        <span id="model-status" style="font-size:0.6rem; color:#00ffc8; height:12px; display:block;"></span>
+                    </div>
+                    <div class="time-module mono-font" id="clock">00:00:00</div>
+                    <button id="create-agent-btn" class="action-btn">+ NUEVO AGENTE</button>
+                </div>
+            </header>
+
+            <div id="dashboard-view" class="view-container">
+                <div class="stats-overview">
+                    <div class="stat-card"><label>SISTEMAS ACTIVOS</label><span id="stat-active">0</span></div>
+                </div>
+                <div class="agents-grid" id="agents-grid"></div>
+            </div>
+
+            <div id="agents-view" class="view-container hidden">
+                <div class="management-table-wrapper glass-card">
+                    <table class="management-table">
+                        <thead>
+                            <tr><th>IDENTIDAD</th><th>MOTOR_IA</th><th>ESTADO</th><th>ACCIONES</th></tr>
+                        </thead>
+                        <tbody id="agents-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="chat-view" class="view-container hidden">
+                <div class="chat-wrapper glass-card">
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <div class="chat-input-area">
+                        <textarea id="chat-input" placeholder="Comandos para Orchestrator..."></textarea>
+                        <button id="send-btn" class="send-icon">➤</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="agent-modal" class="modal hidden">
+        <div class="modal-content glass-card animate-scale-up">
+            <h3 id="modal-title">CONFIGURAR AGENTE</h3>
+            <form id="agent-form">
+                <input type="hidden" id="edit-agent-id">
+                <div class="input-group">
+                    <label>NOMBRE DEL AGENTE</label>
+                    <input type="text" id="agent-name" required>
+                </div>
+                <div class="input-group">
+                    <label>PROVEEDOR (CEREBRO)</label>
+                    <select id="agent-llm" required>
+                        <option value="claude">Master Orchestrator (Claude 3.5)</option>
+                        <option value="groq">High Speed (Groq)</option>
+                        <option value="openai">Logic Master (OpenAI)</option>
+                        <option value="ollama">Local Privacy (Ollama)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>SELECCIONAR AVATAR</label>
+                    <div class="avatar-selector">
+                        <label class="radio-avatar">
+                            <input type="radio" name="agent-avatar" value="orchestrator" checked>
+                            <span class="avatar-box">👑</span>
+                        </label>
+                        <label class="radio-avatar">
+                            <input type="radio" name="agent-avatar" value="agent1">
+                            <span class="avatar-box">🤖</span>
+                        </label>
+                        <label class="radio-avatar">
+                            <input type="radio" name="agent-avatar" value="agent2">
+                            <span class="avatar-box">👾</span>
+                        </label>
+                        <label class="radio-avatar">
+                            <input type="radio" name="agent-avatar" value="agent3">
+                            <span class="avatar-box">🛡️</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>MODELO ESPECÍFICO</label>
+                    <input type="text" id="agent-model" placeholder="auto-select">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="close-modal" class="btn-cancel">CANCELAR</button>
+                    <button type="submit" class="btn-confirm">ESTABLECER AGENTE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
