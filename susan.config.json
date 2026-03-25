@@ -1,0 +1,17 @@
+{
+  "name": "SusanIA Platform",
+  "version": "1.0.0",
+  "owner": "Carlos Barrios",
+  "company": "BP Industries Global",
+  "bridge": {
+    "tailscale_ip": "100.97.56.83",
+    "port": 8080
+  },
+  "vite": {
+    "port": 5173
+  },
+  "deploy": {
+    "frontend": "netlify",
+    "backend": "pm2 @ vnic-beto"
+  }
+}

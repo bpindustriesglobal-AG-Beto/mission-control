@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+*.lock
+.next/
+package-lock.json
+vps-bridge/node_modules/
