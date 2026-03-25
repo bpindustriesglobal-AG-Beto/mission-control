@@ -17,6 +17,10 @@ Trabajar **solo aquí**:
 - bridge en `vps-bridge/`
 - builds en `dist/`
 
+## Modos de despliegue
+- `VITE_APP_MODE=public` → solo capa pública / portfolio / landing (ideal para Netlify)
+- `VITE_APP_MODE=private` → login + dashboard + bridge + runtime real (ideal para VPS)
+
 ## Qué NO hacer
 - No retomar el Mission Control legacy en HTML/CSS/JS plano
 - No crear otra variante paralela del dashboard

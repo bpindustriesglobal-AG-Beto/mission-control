@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, BrainCircuit, Lock, Network, Shield, Sparkles, TerminalSquare, Workflow } from 'lucide-react';
+import { IS_PUBLIC_MODE, PUBLIC_ACCESS_LABEL } from '../../config/runtime';
 
 const capabilities = [
   {
@@ -46,9 +47,15 @@ const Home: React.FC = () => {
             <a href="#architecture" className="font-label uppercase tracking-widest text-xs text-outline hover:text-primary transition-colors">Architecture</a>
           </div>
 
-          <a href="/login" className="secondary-button !px-4 !py-2.5">
-            <Lock size={13} /> Secure Access
-          </a>
+          {IS_PUBLIC_MODE ? (
+            <button className="secondary-button !px-4 !py-2.5 cursor-default">
+              <Lock size={13} /> {PUBLIC_ACCESS_LABEL}
+            </button>
+          ) : (
+            <a href="/login" className="secondary-button !px-4 !py-2.5">
+              <Lock size={13} /> Secure Access
+            </a>
+          )}
         </div>
       </nav>
 
@@ -74,9 +81,15 @@ const Home: React.FC = () => {
             </p>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-              <a href="/login" className="primary-button !px-8 !py-4 ambient-cyan">
-                Enter Mission Control <ArrowRight size={14} />
-              </a>
+              {IS_PUBLIC_MODE ? (
+                <button className="primary-button !px-8 !py-4 ambient-cyan cursor-default">
+                  Private Infrastructure <ArrowRight size={14} />
+                </button>
+              ) : (
+                <a href="/login" className="primary-button !px-8 !py-4 ambient-cyan">
+                  Enter Mission Control <ArrowRight size={14} />
+                </a>
+              )}
               <a href="#capabilities" className="secondary-button !px-8 !py-4">
                 Explore the Platform
               </a>
@@ -202,7 +215,11 @@ const Home: React.FC = () => {
         <div className="max-w-5xl mx-auto glass-panel rounded-xl ghost-border p-12 text-center ambient-cyan">
           <h2 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-6">Ready to assume command?</h2>
           <p className="text-lg text-outline mb-10 max-w-2xl mx-auto">Mission Control opera como una plataforma privada, diseñada para foco, seguridad y ejecución real.</p>
-          <a href="/login" className="primary-button !px-10 !py-4">Enter Platform Gateway</a>
+          {IS_PUBLIC_MODE ? (
+            <button className="primary-button !px-10 !py-4 cursor-default">Private System · Boss Access</button>
+          ) : (
+            <a href="/login" className="primary-button !px-10 !py-4">Enter Platform Gateway</a>
+          )}
         </div>
       </section>
     </div>
